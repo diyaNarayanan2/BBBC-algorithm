@@ -1,0 +1,37 @@
+function [X, fit, pfit]= fobj(X,Lb,Ub) 
+% Correcting the design vector if it is not within the defined range.
+for i = 1:size(X,1)
+	if X(i)>Ub(i)
+	  X(i)=Ub(i);
+  end
+
+	if X(i)<Lb(i)
+	  X(i)=Lb(i);
+  end
+end
+
+% inequality constraints (g(i))
+g(1)=1-(X(2)^3*X(3))/(71785*X(1)^4);
+g(2)=1-(140.45*X(1))/(X(2)^2*X(3));
+g(3)=(X(1)+X(2))/(1.5)-1;
+
+
+fit=(X(3)+2)*X(2)*X(1)^2;
+
+% nou is penalty parameter. 
+
+
+nou=10^5;
+penalty=0;
+
+for i=1:size(g,2)
+  if g(i)>0
+    penalty=penalty+nou*g(i);
+  end
+end
+% Calculate the penalized cost function (pfit) by adding measure of penalty function (penalty).
+
+pfit =fit+penalty;
+
+ 
+end
